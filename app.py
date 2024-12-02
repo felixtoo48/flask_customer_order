@@ -28,6 +28,14 @@ class Customer(db.Model):
     phone_number = db.Column(db.String(20), nullable=False)
 
 
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    item = db.Column(db.String(100), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    time = db.Column(db.DateTime, nullable=False)
+
+
 # creating routes to input/upload customers and orders
 @app.route('/customers', methods=['POST'])
 def add_customer():
