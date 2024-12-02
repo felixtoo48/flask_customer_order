@@ -23,11 +23,25 @@ db = mysql.connector.connect(
 # creating routes to input/upload customers and orders
 @app.route('/customers', methods=['POST'])
 def add_customer():
+    """ function for adding customers """
     data = request.json
     customer = Customer(name=data['name'], code=data['code'], phone_number=data['phone_number'])
     # db.session.add(customer)
     # db.session.commit()
     return jsonify({'message': 'Customer added', 'id': customer.id}), 201
+
+@app.route('/orders', methods=['POST'])
+def add_order():
+    """ function for adding orders """
+    data = request.json
+    order = Order(
+        customer_id=data['customer_id'],
+        item=data['item'],
+        amount=data['amount'],
+        time=data['time']
+    )
+    # db.session.add(order)
+    # db.session.commit()
 
 
 if __name__ == '__main__':
