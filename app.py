@@ -22,6 +22,7 @@ db = mysql.connector.connect(
 
 # Models
 class Customer(db.Model):
+    """ customers model crestion """
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     code = db.Column(db.String(50), unique=True, nullable=False)
@@ -29,6 +30,7 @@ class Customer(db.Model):
 
 
 class Order(db.Model):
+    """ orders model creation """
     id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     item = db.Column(db.String(100), nullable=False)
