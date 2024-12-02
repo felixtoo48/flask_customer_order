@@ -19,5 +19,16 @@ db = mysql.connector.connect(
     database=os.getenv('DB_NAME')
 )
 
+
+# creating routes to input/upload customers and orders
+@app.route('/customers', methods=['POST'])
+def add_customer():
+    data = request.json
+    customer = Customer(name=data['name'], code=data['code'], phone_number=data['phone_number'])
+    # db.session.add(customer)
+    # db.session.commit()
+    return jsonify({'message': 'Customer added', 'id': customer.id}), 201
+
+
 if __name__ == '__main__':
     app.run(debug=True)
