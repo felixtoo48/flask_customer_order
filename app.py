@@ -48,6 +48,7 @@ def add_customer():
     # db.session.commit()
     return jsonify({'message': 'Customer added', 'id': customer.id}), 201
 
+
 @app.route('/orders', methods=['POST'])
 def add_order():
     """ function for adding orders """
