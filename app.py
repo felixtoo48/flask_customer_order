@@ -40,8 +40,8 @@ def add_customer():
     """ function for adding customers """
     data = request.json
     customer = Customer(name=data['name'], code=data['code'], phone_number=data['phone_number'])
-    # db.session.add(customer)
-    # db.session.commit()
+    db.session.add(customer)
+    db.session.commit()
     return jsonify({'message': 'Customer added', 'id': customer.id}), 201
 
 
@@ -55,8 +55,8 @@ def add_order():
         amount=data['amount'],
         time=data['time']
     )
-    # db.session.add(order)
-    # db.session.commit()
+    db.session.add(order)
+    db.session.commit()
 
 
 if __name__ == '__main__':
