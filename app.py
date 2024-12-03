@@ -2,6 +2,10 @@ from flask import Flask, request, jsonify
 import os
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import event
+from datetime import datetime
+import uuid
+import random
 
 
 # load environment variables
@@ -9,11 +13,15 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flask_user:Password@1234@localhost/customer_order'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flask_user:PasswordHere1234.@localhost/customer_order'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db = SQLAlchemy(app)
+
+
+def generate_customer_code():
+    return f"CUST{random.randint(10000, 99999)}"  # generates CUST followed by 5 digits
 
 
 # Models
@@ -21,8 +29,18 @@ class Customer(db.Model):
     """ customers model crestion """
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    code = db.Column(db.String(50), unique=True, nullable=False)
+    code = db.Column(db.String(50), unique=True, nullable=False, default=generate_customer_code)
     phone_number = db.Column(db.String(20), nullable=False)
+
+    # Ensure 'code' is generated if not set manually:
+    @staticmethod
+    def before_insert(mapper, connection, target):
+        if not target.code:
+            target.code = generate_customer_code()
+
+
+# Register the event to trigger before an insert operation
+event.listen(Customer, 'before_insert', Customer.before_insert)
 
 
 class Order(db.Model):
@@ -31,7 +49,7 @@ class Order(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     item = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Float, nullable=False)
-    time = db.Column(db.DateTime, nullable=False)
+    time = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
 
 # creating routes to input/upload customers and orders
