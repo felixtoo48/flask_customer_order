@@ -1,11 +1,12 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for, session
+from authlib.integrations.flask_client import OAuth
 import os
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import event
 from datetime import datetime
 import random
-from flask_oidc import OpenIDConnect
+# from flask_oidc import OpenIDConnect
 import africastalking
 
 
@@ -21,13 +22,67 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
+# Configure Auth0
+oauth = OAuth(app)
+auth0 = oauth.register(
+    'auth0',
+    client_id=os.getenv('AUTH0_CLIENT_ID'),
+    client_secret=os.getenv('AUTH0_CLIENT_SECRET'),
+    api_base_url=f'https://{os.getenv("AUTH0_DOMAIN")}',
+    access_token_url=f'https://{os.getenv("AUTH0_DOMAIN")}/oauth/token',
+    authorize_url=f'https://{os.getenv("AUTH0_DOMAIN")}/authorize',
+    client_kwargs={
+        'scope': 'openid profile email',
+    }
+)
+
+
+# Route to trigger Auth0 login
+@app.route('/login')
+def login():
+    return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'))
+
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'user' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated
+
+
+# Callback route after login
+@app.route('/callback')
+def callback():
+    token = auth0.authorize_access_token()
+    user_info = auth0.get('userinfo').json()
+    session['user'] = user_info
+    return jsonify(user_info)  # Display user info after login
+
+# Protected route
+@app.route('/protected')
+def protected():
+    return "You are logged in!"  
+
+# Logout route
+@app.route('/logout')
+def logout():
+    return redirect(
+    f'https://{os.getenv("AUTH0_DOMAIN")}/v2/logout?'
+    f'returnTo={url_for("login", _external=True)}'
+    f'&client_id={os.getenv("AUTH0_CLIENT_ID")}'
+)
+
+
+
 # Africa's Talking setup
 africastalking.initialize('sandbox', 'your-api-key')  # Replace with real API key
 sms = africastalking.SMS
 
 
 # OpenID Connect setup
-oidc = OpenIDConnect(app)
+# oidc = OpenIDConnect(app)
 
 
 def generate_customer_code():
@@ -64,7 +119,7 @@ class Order(db.Model):
 
 # creating routes to input/upload customers and orders
 @app.route('/customers', methods=['POST'])
-@oidc.accept_token(require_token=True)
+@requires_auth
 def add_customer():
     """ function for adding customers """
     data = request.json
