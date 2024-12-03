@@ -3,20 +3,20 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import unittest
 import json
-from app import app, db, Customer, Order  # Import your Flask app and models
+from app import app, db, Customer, Order
 
 
 class TestAPI(unittest.TestCase):
     def setUp(self):
-        self.app = app.test_client()  # Create a test client
-        app.config['TESTING'] = True  # Use testing config
+        self.app = app.test_client()  # Creating a test client
+        app.config['TESTING'] = True  # Using testing config
         with app.app_context():
-            db.create_all()  # Create test tables
+            db.create_all()  # Creating test tables
 
     def tearDown(self):
         with app.app_context():
             db.session.remove()
-            db.drop_all()  # Clean up the database after each test
+            db.drop_all()  # Cleans up the database after each test
 
     def test_add_customer(self):
         response = self.app.post('/customers', json={
