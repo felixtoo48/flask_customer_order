@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-# import mysql.connector
 import os
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
