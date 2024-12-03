@@ -13,12 +13,10 @@ class TestAPI(unittest.TestCase):
         with app.app_context():
             db.create_all()  # Creating test tables
 
-    """
     def tearDown(self):
         with app.app_context():
             db.session.remove()
             db.drop_all()  # Cleans up the database after each test
-    """
 
     def test_add_customer(self):
         response = self.app.post('/customers', json={
@@ -44,6 +42,6 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn('Order added', data['message'])
 
+
 if __name__ == '__main__':
     unittest.main()
-
