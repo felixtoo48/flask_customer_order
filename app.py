@@ -57,10 +57,14 @@ class Order(db.Model):
 def add_customer():
     """ function for adding customers """
     data = request.json
-    customer = Customer(name=data['name'], code=data['code'], phone_number=data['phone_number'])
+
+    customer = Customer(name=data['name'], phone_number=data['phone_number'])
+    
     db.session.add(customer)
     db.session.commit()
-    return jsonify({'message': 'Customer added', 'id': customer.id}), 201
+    
+    return jsonify({'message': 'Customer added', 'id': customer.id, 'code': customer.code}), 201
+
 
 
 @app.route('/orders', methods=['POST'])
@@ -70,8 +74,7 @@ def add_order():
     order = Order(
         customer_id=data['customer_id'],
         item=data['item'],
-        amount=data['amount'],
-        time=data['time']
+        amount=data['amount']
     )
     db.session.add(order)
     db.session.commit()
@@ -83,7 +86,7 @@ def add_order():
             f"Order placed: {data['item']} for ${data['amount']}. "
             "This message was sent using the Africa's Talking SMS gateway and sandbox."
         )
-        sms.send(message, [customer.phone_number])
+        # sms.send(message, [customer.phone_number])
 
     return jsonify({'message': 'Order added', 'order_id': order.id}), 201
 
