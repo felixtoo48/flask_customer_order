@@ -79,7 +79,7 @@ def add_order():
     db.session.commit()
 
     # Send SMS to the customer
-    customer = Customer.query.get(data['customer_id'])
+    customer = db.session.get(Customer, data['customer_id'])
     if customer:
         message = (
             f"Order placed: {data['item']} for ${data['amount']}. "
