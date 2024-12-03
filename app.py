@@ -64,6 +64,7 @@ class Order(db.Model):
 
 # creating routes to input/upload customers and orders
 @app.route('/customers', methods=['POST'])
+@oidc.accept_token(require_token=True)
 def add_customer():
     """ function for adding customers """
     data = request.json
@@ -77,6 +78,7 @@ def add_customer():
 
 
 @app.route('/orders', methods=['POST'])
+@oidc.accept_token(require_token=True)
 def add_order():
     """ function for adding orders """
     data = request.json
