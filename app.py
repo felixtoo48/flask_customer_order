@@ -76,11 +76,15 @@ def add_order():
     db.session.add(order)
     db.session.commit()
 
+
     """
     # Send SMS to the customer
     customer = Customer.query.get(data['customer_id'])
     if customer:
-        message = f"Order placed: {data['item']} for ${data['amount']}"
+        message = (
+            f"Order placed: {data['item']} for ${data['amount']}. "
+            "This message was sent using the Africa's Talking SMS gateway and sandbox."
+        )
         sms.send(message, [customer.phone_number])
     """
 
