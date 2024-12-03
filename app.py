@@ -4,8 +4,9 @@ from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import event
 from datetime import datetime
-import uuid
 import random
+from flask_oidc import OpenIDConnect
+import africastalking
 
 
 # load environment variables
@@ -18,6 +19,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db = SQLAlchemy(app)
+
+
+# Africa's Talking setup
+africastalking.initialize('sandbox', 'your-api-key')  # Replace with real API key
+sms = africastalking.SMS
+
+
+# OpenID Connect setup
+oidc = OpenIDConnect(app)
 
 
 def generate_customer_code():
