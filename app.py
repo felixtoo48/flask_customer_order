@@ -59,12 +59,11 @@ def add_customer():
     data = request.json
 
     customer = Customer(name=data['name'], phone_number=data['phone_number'])
-    
+
     db.session.add(customer)
     db.session.commit()
-    
-    return jsonify({'message': 'Customer added', 'id': customer.id, 'code': customer.code}), 201
 
+    return jsonify({'message': 'Customer added', 'id': customer.id, 'code': customer.code}), 201
 
 
 @app.route('/orders', methods=['POST'])
