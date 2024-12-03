@@ -76,8 +76,6 @@ def add_order():
     db.session.add(order)
     db.session.commit()
 
-
-    """
     # Send SMS to the customer
     customer = Customer.query.get(data['customer_id'])
     if customer:
@@ -86,7 +84,6 @@ def add_order():
             "This message was sent using the Africa's Talking SMS gateway and sandbox."
         )
         sms.send(message, [customer.phone_number])
-    """
 
     return jsonify({'message': 'Order added', 'order_id': order.id}), 201
 
