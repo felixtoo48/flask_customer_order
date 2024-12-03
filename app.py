@@ -8,6 +8,7 @@ from datetime import datetime
 import random
 # from flask_oidc import OpenIDConnect
 import africastalking
+from functools import wraps
 
 
 # load environment variables
@@ -133,7 +134,7 @@ def add_customer():
 
 
 @app.route('/orders', methods=['POST'])
-@oidc.accept_token(require_token=True)
+@requires_auth
 def add_order():
     """ function for adding orders """
     data = request.json
