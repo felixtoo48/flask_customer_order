@@ -183,7 +183,7 @@ def add_order():
         )
 
         try:
-            response = sms.send(message, [customer.phone_number], sender_id='YOUR_SENDER_ID')
+            response = sms.send(message, [customer.phone_number], sender_id='20267')
             print(response)
         except Exception as e:
             print(f"Error sending SMS: {e}")
