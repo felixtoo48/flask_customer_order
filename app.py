@@ -21,6 +21,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flask_user:PasswordHere
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'          # Store sessions in the filesystem
 app.config['SESSION_PERMANENT'] = False
+app.secret_key = 'your_secret_key'
+
 
 db = SQLAlchemy(app)
 
@@ -62,26 +64,30 @@ def login():
 # Callback route after login
 @app.route('/callback')
 def callback():
-    # Retrieve and validate the state from the session
-    state = session.pop('state', None)
-    # returned_state = request.args.get('state')
+    try:
+        # Retrieve and validate the state from the session
+        state = session.pop('state', None)
+        # returned_state = request.args.get('state')
 
-    # print(f"Stored state: {stored_state}")
-    # print(f"Returned state: {returned_state}")
+        # print(f"Stored state: {stored_state}")
+        # print(f"Returned state: {returned_state}")
 
-    """
-    if stored_state != returned_state:
+        """
+        if stored_state != returned_state:
         app.logger.error("State mismatch: possible CSRF attempt.")
         return jsonify({"error": "State mismatch"}), 400
-    """
+        """
 
-    # Retrieve and validate the nonce from the session
-    nonce = session.pop('nonce', None)
+        # Retrieve and validate the nonce from the session
+        nonce = session.pop('nonce', None)
 
-    # Retrieve the token from the callback
-    token = auth0.authorize_access_token()
-    user_info = auth0.parse_id_token(token, nonce=nonce)
-    return jsonify(user_info)  # Display user info after login
+        # Retrieve the token from the callback
+        token = auth0.authorize_access_token()
+        user_info = auth0.parse_id_token(token, nonce=nonce)
+        return jsonify(user_info)  # Display user info after login
+    except Exception as e:
+        app.logger.error(f"Error during callback: {e}")
+        return jsonify({"error": "Callback processing failed"}), 500
 
 # Protected route
 @app.route('/protected')
