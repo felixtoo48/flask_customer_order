@@ -6,9 +6,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import event
 from datetime import datetime
 import random
-# from flask_oidc import OpenIDConnect
+from flask_oidc import OpenIDConnect
 import africastalking
 from functools import wraps
+from authlib.common.security import generate_token
 
 
 # load environment variables
@@ -18,7 +19,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flask_user:PasswordHere1234.@localhost/customer_order'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.config['SESSION_TYPE'] = 'filesystem'          # Store sessions in the filesystem
+app.config['SESSION_PERMANENT'] = False
 
 db = SQLAlchemy(app)
 
@@ -32,33 +34,53 @@ auth0 = oauth.register(
     api_base_url=f'https://{os.getenv("AUTH0_DOMAIN")}',
     access_token_url=f'https://{os.getenv("AUTH0_DOMAIN")}/oauth/token',
     authorize_url=f'https://{os.getenv("AUTH0_DOMAIN")}/authorize',
+    server_metadata_url=f'https://{os.getenv("AUTH0_DOMAIN")}/.well-known/openid-configuration',
     client_kwargs={
         'scope': 'openid profile email',
     }
+# server_metadata_url=f'https://{os.getenv("AUTH0_DOMAIN")}/.well-known/openid-configuration'
 )
 
 
 # Route to trigger Auth0 login
 @app.route('/login')
 def login():
-    return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'))
+    # Generate a secure random nonce and store it in the session
+    nonce = generate_token()  
+    session['nonce'] = nonce
 
+    # Generate a random state for CSRF protection and store it in the session
+    state = generate_token()  
+    session['state'] = state
+    print(f"State stored in session: {state}")
+    print(f"Generated state: {state}")
 
-def requires_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if 'user' not in session:
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated
+    # Redirect to Auth0 with the nonce and state
+    return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'), nonce=nonce, state=state)
 
 
 # Callback route after login
 @app.route('/callback')
 def callback():
+    # Retrieve and validate the state from the session
+    state = session.pop('state', None)
+    # returned_state = request.args.get('state')
+
+    # print(f"Stored state: {stored_state}")
+    # print(f"Returned state: {returned_state}")
+
+    """
+    if stored_state != returned_state:
+        app.logger.error("State mismatch: possible CSRF attempt.")
+        return jsonify({"error": "State mismatch"}), 400
+    """
+
+    # Retrieve and validate the nonce from the session
+    nonce = session.pop('nonce', None)
+
+    # Retrieve the token from the callback
     token = auth0.authorize_access_token()
-    user_info = auth0.get('userinfo').json()
-    session['user'] = user_info
+    user_info = auth0.parse_id_token(token, nonce=nonce)
     return jsonify(user_info)  # Display user info after login
 
 # Protected route
@@ -74,6 +96,15 @@ def logout():
     f'returnTo={url_for("login", _external=True)}'
     f'&client_id={os.getenv("AUTH0_CLIENT_ID")}'
 )
+
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'user' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated
 
 
 
