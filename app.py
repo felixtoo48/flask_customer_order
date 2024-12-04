@@ -103,7 +103,10 @@ def requires_auth(f):
 
 
 # Africa's Talking setup
-africastalking.initialize('sandbox', 'your-api-key')  # Replace with real API key
+africastalking.initialize(
+    username=os.getenv('AT_USERNAME'),
+    api_key=os.getenv('AT_API_KEY')
+)
 sms = africastalking.SMS
 
 
@@ -178,7 +181,7 @@ def add_order():
             f"Order placed: {data['item']} for ${data['amount']}. "
             "This message was sent using the Africa's Talking SMS gateway and sandbox."
         )
-        # sms.send(message, [customer.phone_number])
+        # sms.send(message, [customer.phone_number], sender_id='YOUR_SENDER_ID')
 
     return jsonify({'message': 'Order added', 'order_id': order.id}), 201
 
