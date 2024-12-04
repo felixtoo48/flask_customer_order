@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flask_user:PasswordHere1234.@localhost/customer_order'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SESSION_TYPE'] = 'filesystem'          # Store sessions in the filesystem
+app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
 
 
@@ -85,7 +85,7 @@ class Order(db.Model):
 # Auth0 routes
 @app.route('/login')
 def login():
-    """ Auth0 login"""
+    """ Auth0 login function"""
 
     # Generate a secure random nonce and store it in the session
     nonce = generate_token()  
