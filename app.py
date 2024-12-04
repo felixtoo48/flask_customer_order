@@ -21,7 +21,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flask_user:PasswordHere
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'          # Store sessions in the filesystem
 app.config['SESSION_PERMANENT'] = False
-app.secret_key = 'your_secret_key'
 
 
 db = SQLAlchemy(app)
