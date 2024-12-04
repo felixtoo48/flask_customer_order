@@ -53,8 +53,6 @@ def login():
     # Generate a random state for CSRF protection and store it in the session
     state = generate_token()  
     session['state'] = state
-    print(f"State stored in session: {state}")
-    print(f"Generated state: {state}")
 
     # Redirect to Auth0 with the nonce and state
     return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'), nonce=nonce, state=state)
@@ -63,39 +61,30 @@ def login():
 # Callback route after login
 @app.route('/callback')
 def callback():
-    try:
-        # Retrieve and validate the state from the session
-        state = session.pop('state', None)
-        # returned_state = request.args.get('state')
 
-        # print(f"Stored state: {stored_state}")
-        # print(f"Returned state: {returned_state}")
+    # Retrieve and validate the nonce from the session
+    nonce = session.pop('nonce', None)
 
-        """
-        if stored_state != returned_state:
-        app.logger.error("State mismatch: possible CSRF attempt.")
-        return jsonify({"error": "State mismatch"}), 400
-        """
+    token = auth0.authorize_access_token()  # Retrieves the token from Auth0
+    print("Access Token:", token)  # Print the full token for debugging
 
-        # Retrieve and validate the nonce from the session
-        nonce = session.pop('nonce', None)
+    user_info = auth0.parse_id_token(token, nonce=nonce)
+    session['user'] = user_info  # Save user info in session
+    return jsonify(user_info)
 
-        # Retrieve the token from the callback
-        token = auth0.authorize_access_token()
-        user_info = auth0.parse_id_token(token, nonce=nonce)
-        return jsonify(user_info)  # Display user info after login
-    except Exception as e:
-        app.logger.error(f"Error during callback: {e}")
-        return jsonify({"error": "Callback processing failed"}), 500
 
 # Protected route
 @app.route('/protected')
 def protected():
-    return "You are logged in!"  
+    print("Session data:", session.get('user'))  # Check if the user is logged in
+    if not session.get('user'):
+        return redirect('/login')  # Redirect if no user session
+    return jsonify({"message": "User is logged in"})  
 
 # Logout route
 @app.route('/logout')
 def logout():
+    session.clear()
     return redirect(
     f'https://{os.getenv("AUTH0_DOMAIN")}/v2/logout?'
     f'returnTo={url_for("login", _external=True)}'
@@ -156,7 +145,7 @@ class Order(db.Model):
 
 # creating routes to input/upload customers and orders
 @app.route('/customers', methods=['POST'])
-@requires_auth
+# @requires_auth
 def add_customer():
     """ function for adding customers """
     data = request.json
@@ -170,7 +159,7 @@ def add_customer():
 
 
 @app.route('/orders', methods=['POST'])
-@requires_auth
+# @requires_auth
 def add_order():
     """ function for adding orders """
     data = request.json
@@ -189,7 +178,7 @@ def add_order():
             f"Order placed: {data['item']} for ${data['amount']}. "
             "This message was sent using the Africa's Talking SMS gateway and sandbox."
         )
-        sms.send(message, [customer.phone_number])
+        # sms.send(message, [customer.phone_number])
 
     return jsonify({'message': 'Order added', 'order_id': order.id}), 201
 
