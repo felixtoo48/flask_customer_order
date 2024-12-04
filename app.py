@@ -110,10 +110,6 @@ africastalking.initialize(
 sms = africastalking.SMS
 
 
-# OpenID Connect setup
-# oidc = OpenIDConnect(app)
-
-
 def generate_customer_code():
     return f"CUST{random.randint(10000, 99999)}"  # generates CUST followed by 5 digits
 
@@ -183,7 +179,7 @@ def add_order():
         )
 
         try:
-            response = sms.send(message, [customer.phone_number], sender_id='20267')
+            response = sms.send(message, [customer.phone_number])
             print(response)
         except Exception as e:
             print(f"Error sending SMS: {e}")
