@@ -181,7 +181,13 @@ def add_order():
             f"Order placed: {data['item']} for ${data['amount']}. "
             "This message was sent using the Africa's Talking SMS gateway and sandbox."
         )
-        # sms.send(message, [customer.phone_number], sender_id='YOUR_SENDER_ID')
+
+        try:
+            response = sms.send(message, [customer.phone_number], sender_id='YOUR_SENDER_ID')
+            print(response)
+        except Exception as e:
+            print(f"Error sending SMS: {e}")
+
 
     return jsonify({'message': 'Order added', 'order_id': order.id}), 201
 
