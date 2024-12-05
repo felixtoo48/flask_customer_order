@@ -59,7 +59,8 @@ For the technical challenge, I decided to develop the project using Flask becaus
 
 ## Environment
 This project is interpreted/tested on Ubuntu 20.04 LTS using Flask (version 3.0.3)
-create .env file and add the following contents serving as credentials.
+
+I created .env file and add the following contents serving as credentials.
 
 ```
 # yoursecret key
