@@ -54,7 +54,7 @@ For the technical challenge, I decided to develop the project using Flask becaus
 * [File Descriptions](#file-descriptions)
 * [Usage](#usage)
 * [Bugs](#bugs)
-* [Authors](#authors)
+* [Author](#author)
 * [License](#license)
 
 ## Environment
@@ -82,7 +82,7 @@ AUTH0_CALLBACK_URL="http://localhost:5000/callback"
 AT_USERNAME="sandbox"
 AT_API_KEY=" "
 ``` 
-You can use the values according to your preference
+You can use your values according to your preference
 
 ## Installation
 * To get started, install python3 development tools on your virtual machine.
@@ -123,17 +123,46 @@ Classes in the model:
 	* `item` - Ordered item
 	* `amount` - Amount of the item
 
-#### `Product` - This is the class containing the products and services information
-* Basic fields, utility fields and related field(client foreign key)
-* `def __str__(self)` - String representation of the product title and uniqueId
-* `def get_absolute_url(self)` - get url of slug
-* `def save(self, *args, **kwargs)` - Autosave function definition
+#### Routes - Routes used by the APIs and Auth0
+Such routes used include:
 
-#### `Settings` - This is the class containg the settings about the company
-* Basic fields, utility fields
-* `def __str__(self)` - String representation of the client name, provice and uniqueId
-* `def get_absolute_url(self)` - get url of client detail, slug
-* `def save(self, *args, **kwargs)` - Autosave function definition
+#### `/login` - Auth0 login route
+* Returns redirect to callback url
+
+#### `/callback` - Callback after login to Auth0
+* Returns user information in JSON format
+
+#### `/protected` - Routing for protected view
+* Protected user session after login
+
+#### `/logout` - Logout routing from Auth0
+* Redirects to login page after seccessfully logging out
+
+#### `/add_customer` - API for creating a customer
+* Function for creating/adding a customer or customers
+
+#### `/add_order` - app route for inputting orders and sending SMS alert at the same time
+* Function creates new customer orders for valid customers
+* Also function sends SMS alert to customer after successfully creating an order through Africa's Talking SMS sandbox gateway
+
+#### Others - Setups and Configurations
+Configurations and Setups useful in the flask application for good functionality
+
+#### `Configurations` - File [.env](.env) 
+* Database Configuration - MySQL Config data
+* Auth0 Configuration
+* Flask environment Config key
+* Africa's Talking Setup
+	* API key = ""
+	* Username = Sandbox
+
+#### `def generate_customer_code()` - Function for generating unique customer code
+* Generates unique customer code
+
+#### `def requires_auth(f)` - Decorator function for authentication
+* Decorator function used in authentication
+
+
 
 
 [functions.py](bitinvoice_01/functions.py) - Function definition for emailing invoice to the client
@@ -164,7 +193,7 @@ Classes in the model:
 ## Bugs
 No known bugs at this time. 
 
-## Authors
+## Author
 * Felix Too - [Github](https://github.com/felixtoo48) 
 
 ## License
