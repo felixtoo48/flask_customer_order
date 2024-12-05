@@ -1,5 +1,4 @@
 # Savannah Informatics Back End Dev - Technical Challenge
-The project is a simple customer order technical challenge question, integrating SMS alerting as well as authorization and authentication using OpenID Connect(AUTH0).
 
 ## About The Project
 The project is a simple customer order technical challenge question, integrating SMS alerting as well as authorization and authentication using OpenID Connect(AUTH0).
@@ -50,6 +49,8 @@ For the technical challenge, I decided to develop the project using Flask becaus
 * SMS Alerting using Africa's Talking SMS gateway and sandbox
 
 ## Table of Content
+* [About The Project](#about-the-project)
+* [Getting Started](#getting-started)
 * [Environment](#environment)
 * [Installation](#installation)
 * [File Descriptions](#file-descriptions)
