@@ -160,6 +160,12 @@ def add_customer():
 def add_order():
     """ function for adding orders """
     data = request.json
+
+    # Check if customer exists
+    customer = db.session.get(Customer, data['customer_id'])
+    if not customer:
+        return jsonify({'error': 'Customer does not exist'}), 400
+
     order = Order(
         customer_id=data['customer_id'],
         item=data['item'],
