@@ -144,6 +144,10 @@ def add_customer():
     """ function for adding customers """
     data = request.json
 
+    # Check if required fields are missing
+    if not data.get('name') or not data.get('phone_number'):
+        return jsonify({'error': 'Missing required fields'}), 400
+
     customer = Customer(name=data['name'], phone_number=data['phone_number'])
 
     db.session.add(customer)
