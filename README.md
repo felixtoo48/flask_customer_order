@@ -47,6 +47,7 @@ For the technical challenge, I decided to develop the project using Flask becaus
 
 ## Table of Content
 * [About The Project](#about-the-project)
+* [Screening Test](#screening-test)
 * [Getting Started](#getting-started)
 * [Environment](#environment)
 * [Installation](#installation)
@@ -58,6 +59,28 @@ For the technical challenge, I decided to develop the project using Flask becaus
 
 ## Environment
 This project is interpreted/tested on Ubuntu 20.04 LTS using Flask (version 3.0.3)
+create .env file and add the following contents serving as credentials.
+
+```
+# yoursecret key
+SECRET_KEY=" "
+
+# Database configurations
+DB_USERNAME="flask_user"
+DB_PASSWORD=" "
+DB_HOST="localhost"
+DB_NAME="customer_order"
+
+# oidc Auth0 credentials
+AUTH0_CLIENT_ID="leAT0LwGQ8bY8fCT8Qj81HYTQcUEanwA"
+AUTH0_CLIENT_SECRET=" "
+AUTH0_DOMAIN="dev-7fg7hphj1ldi61w0.us.auth0.com"
+AUTH0_CALLBACK_URL="http://localhost:5000/callback"
+
+# Africa's talking portal credentials
+AT_USERNAME="sandbox"
+AT_API_KEY=" "
+``` 
 
 ## Installation
 * To get started, install python3 development tools on your virtual machine.
