@@ -12,19 +12,16 @@ will be an advantage.
 * Experience writing automated tests at all levels - unit, integration and acceptance testing
 * Experience with CI/CD (any CI/CD platform)
 
-They were particularly interested in:
-- Testing + coverage + CI/CD
-- HTTP and APIs e.g. REST
-- OAuth2
-- Web security e.g. XSS
-- Logic / flow of thought
-- Setting up a database
-- Version control
-
+Particularly the areas of interest include:
+* Testing + coverage + CI/CD
+* HTTP and APIs e.g. REST
+* OAuth2
+* Web security e.g. XSS
+* Logic / flow of thought
+* Setting up a database
+* Version control
 
 ## Screening Test
-
-They were particularly interested in:
 1. Create a simple Python or Go service.
 2. Design a simple customers and orders database (keep it simple)
 3. Add a REST or GraphQL API to input / upload customers and orders:
