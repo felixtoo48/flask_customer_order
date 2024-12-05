@@ -128,10 +128,10 @@ def logout():
     """ logout function """
     session.clear()
     return redirect(
-    f'https://{os.getenv("AUTH0_DOMAIN")}/v2/logout?'
-    f'returnTo={url_for("login", _external=True)}'
-    f'&client_id={os.getenv("AUTH0_CLIENT_ID")}'
-)
+        f'https://{os.getenv("AUTH0_DOMAIN")}/v2/logout?'
+        f'returnTo={url_for("login", _external=True)}'
+        f'&client_id={os.getenv("AUTH0_CLIENT_ID")}'
+    )
 
 
 def requires_auth(f):
@@ -198,6 +198,5 @@ def add_order():
     return jsonify({'message': 'Order added', 'order_id': order.id}), 201
 
 
-if __name__ == '__main__' and 'pytest' not in sys.modules: # pragma: no cover
+if __name__ == '__main__' and 'pytest' not in sys.modules:  # pragma: no cover
     app.run(debug=True)
-
