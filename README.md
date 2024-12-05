@@ -81,6 +81,7 @@ AUTH0_CALLBACK_URL="http://localhost:5000/callback"
 AT_USERNAME="sandbox"
 AT_API_KEY=" "
 ``` 
+You can use the values according to your preference
 
 ## Installation
 * To get started, install python3 development tools on your virtual machine.
