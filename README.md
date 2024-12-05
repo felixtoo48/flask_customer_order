@@ -1,5 +1,3 @@
-Simple Customer order project interview questio, integrating SMS alerting as well as 
-authorization and authentication using OpenID Connect
 # Savannah Informatics Back End Dev - Technical Challenge
 The project is a simple customer order technical challenge question, integrating SMS alerting as well as authorization and authentication using OpenID Connect(AUTH0).
 
