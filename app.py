@@ -76,7 +76,7 @@ event.listen(Customer, 'before_insert', Customer.before_insert)
 class Order(db.Model):
     """ orders model creation """
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id', ondelete='CASCADE')), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id', ondelete='CASCADE'), nullable=False)
     item = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Float, nullable=False)
     time = db.Column(db.DateTime, nullable=False, default=datetime.now)
