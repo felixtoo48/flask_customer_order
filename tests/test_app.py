@@ -82,7 +82,7 @@ class TestAPI(unittest.TestCase):
             customer_id = customer.id
 
             # Mock the sms.send method to raise an exception
-        with patch('path_to_your_sms_module.sms.send', side_effect=Exception("SMS sending failed")):
+        with patch('africastalking.SMS.send', side_effect=Exception("SMS sending failed")):
             response = self.app.post('/orders', json={
                 'customer_id': customer_id,
                 'item': 'Test Item',
