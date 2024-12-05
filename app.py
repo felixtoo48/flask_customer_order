@@ -1,3 +1,4 @@
+import sys
 from flask import Flask, request, jsonify, redirect, url_for, session
 from authlib.integrations.flask_client import OAuth
 import os
@@ -192,6 +193,6 @@ def add_order():
     return jsonify({'message': 'Order added', 'order_id': order.id}), 201
 
 
-if __name__ == '__main__' and 'pytest' not in sys.modules:
+if __name__ == '__main__' and 'pytest' not in sys.modules: # pragma: no cover
     app.run(debug=True)
 
