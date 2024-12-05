@@ -5,6 +5,7 @@ import unittest
 import json
 from app import app, db, Customer, Order
 import pytest
+from unittest.mock import patch
 
 
 class TestAPI(unittest.TestCase):
@@ -22,6 +23,27 @@ class TestAPI(unittest.TestCase):
     def test_login_redirect(self):
         response = self.app.get('/login')
         self.assertEqual(response.status_code, 302) # Redirects to Auth0
+
+
+    def test_protected_route_without_login(self):
+        response = self.app.get('/protected')
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/login', response.headers['Location'])
+
+
+    @patch('app.auth0.authorize_access_token')
+    @patch('app.auth0.parse_id_token')
+    def test_callback(self, mock_parse_id_token, mock_authorize_access_token):
+        mock_authorize_access_token.return_value = {'id_token': 'test_token'}
+        mock_parse_id_token.return_value = {'sub': 'user123', 'email': 'test@example.com'}
+
+        with self.app.session_transaction() as sess:
+            sess['nonce'] = 'test_nonce'
+
+        response = self.app.get('/callback')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('test@example.com', response.json['email'])
+
 
 
     def test_add_customer(self):
