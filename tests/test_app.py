@@ -30,7 +30,6 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn('/login', response.headers['Location'])
 
-
     @patch('app.auth0.authorize_access_token')
     @patch('app.auth0.parse_id_token')
     def test_callback(self, mock_parse_id_token, mock_authorize_access_token):
@@ -73,7 +72,7 @@ class TestAPI(unittest.TestCase):
         self.assertIn('Order added', data['message'])
 
     def test_sms_sending_on_order(self):
-        with app.app_context():  # Ensure you're inside the app context
+        with app.app_context():
             # Create a customer
             customer = Customer(name="Test Customer", phone_number="+254700000000")
             db.session.add(customer)
@@ -81,7 +80,7 @@ class TestAPI(unittest.TestCase):
 
             customer_id = customer.id
 
-            # Mock the sms.send method to raise an exception
+            # Mocking the sms.send method to raise an exception
         with patch('africastalking.SMS.send', side_effect=Exception("SMS sending failed")):
             response = self.app.post('/orders', json={
                 'customer_id': customer_id,
@@ -111,11 +110,11 @@ class TestAPI(unittest.TestCase):
     def test_add_order_invalid_customer(self):
         # Attempt to add an order for a non-existent customer
         response = self.app.post('/orders', json={
-            'customer_id': 9999,  # Non-existent customer ID
+            'customer_id': 9999,
             'item': 'Invalid Order',
             'amount': 100
         })
-        self.assertEqual(response.status_code, 400)  # Should fail with a bad request error
+        self.assertEqual(response.status_code, 400)
         data = json.loads(response.data)
         self.assertIn('Customer does not exist', data['error'])
 
