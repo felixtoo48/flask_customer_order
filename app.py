@@ -89,15 +89,16 @@ def login():
     """ Auth0 login function"""
 
     # Generate a secure random nonce and store it in the session
-    nonce = generate_token()  
+    nonce = generate_token()
     session['nonce'] = nonce
 
     # Generate a random state for CSRF protection and store it in the session
-    state = generate_token()  
+    state = generate_token()
     session['state'] = state
 
     # Redirect to Auth0 with the nonce and state
     return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'), nonce=nonce, state=state)
+
 
 @app.route('/callback')
 def callback():
@@ -112,13 +113,15 @@ def callback():
     session['user'] = user_info  # Save user info in session
     return jsonify(user_info)
 
+
 @app.route('/protected')
 def protected():
     """ protected user session after login """
     print("Session data:", session.get('user'))  # Check if the user is logged in
     if not session.get('user'):
         return redirect('/login')  # Redirect if no user session
-    return jsonify({"message": "User is logged in"})  
+    return jsonify({"message": "User is logged in"})
+
 
 @app.route('/logout')
 def logout():
@@ -130,6 +133,7 @@ def logout():
     f'&client_id={os.getenv("AUTH0_CLIENT_ID")}'
 )
 
+
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -137,6 +141,7 @@ def requires_auth(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated
+
 
 # creating routes to input/upload customers and orders
 @app.route('/customers', methods=['POST'])
@@ -155,6 +160,7 @@ def add_customer():
     db.session.commit()
 
     return jsonify({'message': 'Customer added', 'id': customer.id, 'code': customer.code}), 201
+
 
 @app.route('/orders', methods=['POST'])
 # @requires_auth
@@ -188,7 +194,6 @@ def add_order():
             print(response)
         except Exception as e:
             print(f"Error sending SMS: {e}")
-
 
     return jsonify({'message': 'Order added', 'order_id': order.id}), 201
 
