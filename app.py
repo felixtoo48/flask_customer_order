@@ -112,6 +112,7 @@ def test_session():
 # Auth0 routes
 @app.route('/login')
 def login():
+    session.permanent = True
     state = str(uuid.uuid4())  # Generate a unique state
     nonce = str(uuid.uuid4())  # Generate a unique nonce for security
     
