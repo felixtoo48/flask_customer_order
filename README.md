@@ -162,33 +162,29 @@ Configurations and Setups useful in the flask application for good functionality
 #### `def requires_auth(f)` - Decorator function for authentication
 * Decorator function used in authentication
 
+[.env](.env) - File contains environment variables that are secretive in nature
+* File contains environment variables/app credentials i.e. database
+
+[requirements.txt](requirements.txt) - contains project requirements/dependacies
 
 
+[ci-cd.yml](.github/workflows/ci-cd.yml) - CI/CD Pipeline with GitHub actions
+* CI - CD Pipeline with github actions for continuous integration and continuous delivery
 
-[functions.py](bitinvoice_01/functions.py) - Function definition for emailing invoice to the client
-* `def emailInvoiceClient(to_email, from_client, filepath)` - For emailing invoice function
-
-[forms.py](bitinvoice_01/forms.py) - Control form for information input from the front-end view
-#### forms - contains classes used for controlling form input
-#### `DateInput(forms.DateInput)` - Used to input date
-#### `UserLoginForm(forms.ModelForm)` - Class for user log in at the login page
-#### `ClientForm(forms.ModelForm)` - Class for client input form
-#### `ProductForm(forms.ModelForm)` - Class for product input form
-#### `InvoiceForm(forms.ModelForm)` - Invoice details input form
-* `def __init__(self, *args, **kwargs)` - Initializing base model
-#### `SettingsForm(forms.ModelForm)` - Company settings details input form
-#### `ClientSelectForm(forms.ModelForm)` - Client selection form
-* `def clean_client(self)` - client removal from the form
-
-[urls.py](bitinvoice_01/urls.py) - Contails urls for respective paths
-
-[views.py](bitinvoice_01/views.py) - Definition of the views rendered
-#### views - views rendered/requested
-* `def anonymous_required(function=None, redirect_url=None)` - Definition for checking if one is logged in or not to be able to access dashboard, and invoice
-* `def login(request)` - Log in request
-* `def dashboard(request)` - Dashboard request definition
-* `def index(request)` - landing page request definition
-
+[test_app.py](tests/test_app.py) - Test cases for the flask app
+#### Tests - Tests written for the app functions
+Classes in the model:
+#### `TestAPI` - This is the class containing the test cases for app.py
+* `def setUp(self)` - Creates test client
+* `def tearDown(self)` - Cleans up database after each test
+* `def test_login_redirect(self)` - Tests login redirect to Auth0
+* `def test_protected_route_without_login(self)` - Tests protected route before login 
+* `def test_callback(self, mock_parse_id_token, mock_authorize_access_token)` - Tests call back after login, while on session
+* `def test_add_customer(self)` - Tests customer creation
+* `def test_add_order(self)` - Tests order creation
+* `def test_sms_sending_on_order(self)` - Tests SMS alert after order creation
+* `def test_add_customer_invalid(self)` - Tests addition of customer with missing data
+* `def test_add_order_invalid_customer(self)` - Tests addition of order for a non existent customer
 
 ## Bugs
 No known bugs at this time. 
