@@ -1,5 +1,6 @@
 import sys
 from flask import Flask, request, jsonify, redirect, url_for, session
+from flask_session import Session
 from authlib.integrations.flask_client import OAuth
 import os
 from dotenv import load_dotenv
@@ -11,6 +12,7 @@ from flask_oidc import OpenIDConnect
 import africastalking
 from functools import wraps
 from authlib.common.security import generate_token
+import uuid
 
 
 # load environment variables
@@ -21,7 +23,17 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flask_user:PasswordHere1234.@localhost/customer_order'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = './flask_session'
+app.config['SESSION_COOKIE_NAME'] = 'session_cookie'
 app.config['SESSION_PERMANENT'] = False
+app.secret_key = os.getenv('SECRET_KEY')
+
+
+# Initialize session
+Session(app)
+
+if not os.path.exists('./flask_session'):
+    os.makedirs('./flask_session')
 
 
 db = SQLAlchemy(app)
@@ -41,6 +53,7 @@ auth0 = oauth.register(
         'scope': 'openid profile email',
     }
 )
+
 
 # Africa's Talking setup
 africastalking.initialize(
@@ -83,34 +96,50 @@ class Order(db.Model):
     time = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
 
+"""
+@app.route('/test_session')
+def test_session():
+    # Set a simple key-value pair in the session
+    session['test_key'] = 'test_value'
+
+    # Print the value from the session for debugging
+    print(f"Session test_key: {session.get('test_key')}")
+
+    return "Session test successful!"
+"""
+
+
 # Auth0 routes
 @app.route('/login')
 def login():
-    """ Auth0 login function"""
-
-    # Generate a secure random nonce and store it in the session
-    nonce = generate_token()
-    session['nonce'] = nonce
-
-    # Generate a random state for CSRF protection and store it in the session
-    state = generate_token()
+    state = str(uuid.uuid4())  # Generate a unique state
+    nonce = str(uuid.uuid4())  # Generate a unique nonce for security
+    
     session['state'] = state
-
-    # Redirect to Auth0 with the nonce and state
-    return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'), nonce=nonce, state=state)
+    session['nonce'] = nonce
+    
+    return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'), state=state, nonce=nonce)
 
 
 @app.route('/callback')
 def callback():
-    """ call back after login """
-    # Retrieve and validate the nonce from the session
+    """ Callback after login. """
+    # Retrieve and validate the nonce and state from the session
     nonce = session.pop('nonce', None)
+    state = session.pop('state', None)
 
+    # Validate that the state in the request matches the one stored in session
+    if state != request.args.get('state'):
+        raise Exception("State mismatch: potential CSRF attack detected!")
+    
+    # Exchange authorization code for access token
     token = auth0.authorize_access_token()  # Retrieves the token from Auth0
     print("Access Token:", token)  # Print the full token for debugging
 
-    user_info = auth0.parse_id_token(token, nonce=nonce)
+    # Parse the ID token and check the nonce
+    user_info = auth0.parse_id_token(token, nonce=nonce, claims_options={'iat': {'leeway': 60}})
     session['user'] = user_info  # Save user info in session
+    
     return jsonify(user_info)
 
 
