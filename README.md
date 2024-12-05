@@ -1,9 +1,51 @@
 # Savannah Informatics Back End Dev - Technical Challenge
 The project is a simple customer order technical challenge question, integrating SMS alerting as well as authorization and authentication using OpenID Connect(AUTH0).
 
+## About The Project
+The project is a simple customer order technical challenge question, integrating SMS alerting as well as authorization and authentication using OpenID Connect(AUTH0).
+
+The technical interview was built around a coding assignment that is designed to screen for the following basic skills:
+* Experience in developing REST and GraphQL APIs in Python/Go
+* Experience with a configuration management tool e.g. Chef, Puppet, Ansible etc
+* Experience working with an infrastructure as code tool e.g. Terraform or Pulumi
+will be an advantage.
+* Experience working with containers and container orchestration tools e.g. k8s
+* Experience writing automated tests at all levels - unit, integration and acceptance testing
+* Experience with CI/CD (any CI/CD platform)
+
+They were particularly interested in:
+- Testing + coverage + CI/CD
+- HTTP and APIs e.g. REST
+- OAuth2
+- Web security e.g. XSS
+- Logic / flow of thought
+- Setting up a database
+- Version control
+
+
+## Screening Test
+
+They were particularly interested in:
+1. Create a simple Python or Go service.
+2. Design a simple customers and orders database (keep it simple)
+3. Add a REST or GraphQL API to input / upload customers and orders:
+    - Customers have simple details e.g., name and code.
+    - Orders have simple details e.g., item, amount, and time.
+4. Implement authentication and authorization via OpenID Connect
+5. When an order is added, send the customer an SMS alerting them (you can use the
+Africa’s Talking SMS gateway and sandbox)
+6. Write unit tests (with coverage checking) and set up CI + automated CD. You can deploy
+to any PAAS/FAAS/IAAS of your choice
+7. Write a README for the project and host it on your GitHub
+
+## Getting Started
+
+For the technical challenge, I decided to develop the project using Flask because of its simplicity and flexibility, since the the project does not have alot of requirements and MySQL as my database for the project.
+
 #### Functionalities of the project:
 * Creating a customer
 * Creating an order
+* Storing the created orders and customers
 * Authentication and Authorization via OpenID Connect
 * SMS Alerting using Africa's Talking SMS gateway and sandbox
 
