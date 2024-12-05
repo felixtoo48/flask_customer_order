@@ -53,3 +53,4 @@ jobs:
           TEST_DB_URI: mysql://testuser:testpassword@127.0.0.1/testdb  # Database for tests
         run: |
           pytest
+          pytest --cov=app
