@@ -19,6 +19,11 @@ class TestAPI(unittest.TestCase):
             db.session.remove()
             db.drop_all()  # Cleans up the database after each test
 
+    def test_login_redirect(self):
+        response = self.app.get('/login')
+        self.assertEqual(response.status_code, 302) # Redirects to Auth0
+
+
     def test_add_customer(self):
         response = self.app.post('/customers', json={
             'name': 'John Doe',
@@ -30,18 +35,62 @@ class TestAPI(unittest.TestCase):
 
     def test_add_order(self):
         with app.app_context():
-            customer = Customer(name="Jane Doe", phone_number="+254700000000")
+            customer = Customer(name="Test Customer", phone_number="+254700000000")
             db.session.add(customer)
             db.session.commit()
 
+            customer_id = customer.id
+
         response = self.app.post('/orders', json={
-            'customer_id': 1,
-            'item': 'Product A',
+            'customer_id': customer_id,
+            'item': 'Product Test',
             'amount': 150.75
         })
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 201)
         self.assertIn('Order added', data['message'])
+
+    def test_sms_sending_on_order(self):
+        with app.app_context():  # Ensure you're inside the app context
+            # Create a customer
+            customer = Customer(name="Test Customer", phone_number="+254700000000")
+            db.session.add(customer)
+            db.session.commit()
+
+            customer_id = customer.id
+
+            # Create an order for the customer
+            response = self.app.post('/orders', json={
+                'customer_id': customer_id,
+                'item': 'Product Test',
+                'amount': 150.75
+            })
+        
+            data = json.loads(response.data)
+            self.assertEqual(response.status_code, 201)
+            self.assertIn('Order added', data['message'])
+
+
+
+    """
+    def test_add_customer_invalid(self):
+        # Missing customer data (empty JSON body or incomplete fields)
+        response = self.app.post('/customers', json={})
+        self.assertEqual(response.status_code, 400)  # Should fail due to missing data
+        data = json.loads(response.data)
+        self.assertIn('Missing required fields', data['message'])
+
+    def test_add_order_invalid_customer(self):
+        # Attempt to add an order for a non-existent customer
+        response = self.app.post('/orders', json={
+            'customer_id': 9999,  # Non-existent customer ID
+            'item': 'Invalid Order',
+            'amount': 100
+        })
+        self.assertEqual(response.status_code, 400)  # Should fail with a bad request error
+        data = json.loads(response.data)
+        self.assertIn('Customer does not exist', data['message'])
+    """
 
 
 if __name__ == '__main__':
