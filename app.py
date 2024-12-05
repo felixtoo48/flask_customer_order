@@ -192,5 +192,6 @@ def add_order():
     return jsonify({'message': 'Order added', 'order_id': order.id}), 201
 
 
-if __name__ == '__main__':
+if __name__ == '__main__' and 'pytest' not in sys.modules:
     app.run(debug=True)
+
