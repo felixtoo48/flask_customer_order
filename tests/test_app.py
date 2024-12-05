@@ -106,7 +106,7 @@ class TestAPI(unittest.TestCase):
         data = json.loads(response.data)
         self.assertIn('Missing required fields', data['error'])
 
-    """
+
     def test_add_order_invalid_customer(self):
         # Attempt to add an order for a non-existent customer
         response = self.app.post('/orders', json={
@@ -116,8 +116,7 @@ class TestAPI(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 400)  # Should fail with a bad request error
         data = json.loads(response.data)
-        self.assertIn('Customer does not exist', data['message'])
-    """
+        self.assertIn('Customer does not exist', data['error'])
 
 
 if __name__ == '__main__':
