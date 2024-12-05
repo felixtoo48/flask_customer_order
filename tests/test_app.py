@@ -93,15 +93,20 @@ class TestAPI(unittest.TestCase):
             self.assertIn('Order added', data['message'])
 
 
-
-    """
     def test_add_customer_invalid(self):
-        # Missing customer data (empty JSON body or incomplete fields)
+        # Missing customer data/empty JSON body
         response = self.app.post('/customers', json={})
         self.assertEqual(response.status_code, 400)  # Should fail due to missing data
         data = json.loads(response.data)
-        self.assertIn('Missing required fields', data['message'])
+        self.assertIn('Missing required fields', data['error'])
 
+        # Test with incomplete fields (missing phone number)
+        response = self.app.post('/customers', json={'name': 'John Doe'})
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.data)
+        self.assertIn('Missing required fields', data['error'])
+
+    """
     def test_add_order_invalid_customer(self):
         # Attempt to add an order for a non-existent customer
         response = self.app.post('/orders', json={
