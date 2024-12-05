@@ -104,20 +104,23 @@ You can use the values according to your preference
 * Start the app bitinvoice: `python manage.py startapp bitinvoice_01`
 
 ## File Descriptions
-[models.py](bitinvoice_01/models.py) - This are the base models for my project, the entry point to the project.
-#### models - contains base classes used for this project
+[app.py](app.py) - This are the base models or entry point to the project.
+#### models - included are the base classes used for this project
 Classes in the model:
-#### `Client` - This is the class containing the clients information
-* Basic Fields and Utility fields defined
-* `def __str__(self)` - String representation of the client name, provice and uniqueId
-* `def get_absolute_url(self)` - get url of client detail, slug
-* `def save(self, *args, **kwargs)` - Autosave function definition
+#### `Customer` - This is the class containing the customers information
+* Basic Fields defined
+	* `id` - Primary key
+ 	* `code` - Unique code for every customer
+	* `name` - Customer name
+	* `phone_number` - customer phone number
+* `def before_insert(mapper, connection, target)` - Static method ensuring code is generated if not set manually
 
-#### `Invoice` - This is the class containing the Invoice inormation
+#### `Order` - This is the class containing the order information
 * Basic fields, utility fields and related field(client foreign key)
-* `def __str__(self)` - String representation of the number and uniqueId
-* `def get_absolute_url(self)` - get url of slug
-* `def save(self, *args, **kwargs)` - Autosave function definition
+	* `id` - Primary key
+	* `customer_id` - Foreign key
+	* `item` - Ordered item
+	* `amount` - Amount of the item
 
 #### `Product` - This is the class containing the products and services information
 * Basic fields, utility fields and related field(client foreign key)
