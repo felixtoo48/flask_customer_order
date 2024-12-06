@@ -126,6 +126,7 @@ flask_customer_order/
 	- Install MySQL if not already
 	- Create database and user
    		### Database Design
+
 			Customer Table: `id`, `name`, `code`, `phone_number`.
 
 			Order Table: `id`, `customer_id`(FK), `item`, `amount`, `time`. 
