@@ -86,7 +86,7 @@ AT_API_KEY=" "
 You can use your values according to your preference
 
 ## Installation
-* To get started, install python3 development tools on your virtual machine.
+* To get started, install python3 development tools on your virtual machine or virtual environment.
 * `sudo apt-get update`
 * `sudo apt install mysql-server`
 * Setup mysql database: `mysql -u root -p` 
@@ -127,7 +127,9 @@ flask_customer_order/
 	- Create database and user
 	- #### Database Design
 		Customer Table: `id`, `name`, `code`, `phone_number`.
+
 		Order Table: `id`, `customer_id`(FK), `item`, `amount`, `time`. 
+
 2. Setup the Flask project following the project structure
 3. Coding the flask app
 4. Setup environment variables
