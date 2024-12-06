@@ -87,40 +87,25 @@ You can use your values according to your preference
 ## Installation
 * To get started, install python3 development tools on your virtual machine.
 * `sudo apt-get update`
-* `sudo apt-get install python3-pip python3-dev libpq-dev postgresql postgresql-contrib`
-* Setup postgre database: `sudo -u postgres psql` 
+* `sudo apt install mysql-server`
+* Setup mysql database: `mysql -u root -p` 
 * Create database, create user and grant all priviledges, flush privileges)
 * mysql> `CREATE DATABASE customer_order;`
 * mysql> `CREATE USER 'flask_user'@'localhost' IDENTIFIED BY 'password';`
 * mysql> `GRANT ALL PRIVILEGES ON customer_order.* TO 'flask_user'@'localhost';`
 * mysql> `FLUSH PRIVILEGES`
-* Install virtual environment and install django
+* Install virtual environment
 * `sudo -H pip3 install --upgrade pip` then `sudo -H pip3 install virtualenv`
-* Create directory and install django 
-* `mkdir export_foods && cd export_foods`
+* Create directory and install flask 
+* `mkdir flask_customer_order  && cd flask_customer_order`
 * Create the project's virtual environment and start it
-* `virtualenv export_foodsenv`
-* `source export_foodsenv/bin/activate`
-* Install packages: `pip install django` and `pip install psycopg2`
-* Create a new django project `export_foodsapp`: `django-admin startproject export_foodsapp`
-* `cd export_foodsapp` and edit settings file `export_foodsapp/settings.py` with Database details
-* `
-* DATABASES = {
-*     'default': {
-*       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-*        'NAME': 'myproject',
-*        'USER': 'myprojectuser',
-*        'PASSWORD': 'password',
-*        'HOST': 'localhost',
-*        'PORT': '',
-*    }
-* }
-* `
-* Make migrations: `python manage.py makemigrations` then `python manage.py migrate`
-* Create a superuser: `python manage.py createsuperuser`
-* Collect static: `python manage.py collectstatic`
-* Run app: `python manage.py runserver 0.0.0.0:5000`
-* Start the app: `python manage.py startapp export_foods`
+* `python -m venv venv`
+* `source venv/bin/activate`
+* Install packages required
+* Or install dependancies from requirements.txt file `pip install requirements.txt`
+* Create a new flask project `app.py`
+* Run app: `flask run`
+* Continue development
 
 ## File Descriptions
 [app.py](app.py) - This are the base models or entry point to the project.
