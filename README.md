@@ -101,6 +101,19 @@ You can use your values according to your preference
 * Create the project's virtual environment and start it
 * `python -m venv venv`
 * `source venv/bin/activate`
+* `pip install flask mysql-connector-python gunicorn`
+* Project structure
+```
+flask_customer_order/
+│── app.py
+│── requirements.txt
+│── .env
+│── Procfile
+|── .github/
+|   └── workflows/
+|       └── ci_cd.yml
+|__ tests/test_app.py
+```
 * Install packages required
 * Or install dependancies from requirements.txt file `pip install requirements.txt`
 * Create a new flask project `app.py`
