@@ -239,7 +239,8 @@ Classes in the model:
 ## Testing
 * Testing methods can be conducted as follows:
 * Testing can be conducted using CURL
-  Testing APIs using CURL example:
+
+* Testing APIs using CURL example:
   Testing customer API
   ```
   curl -X POST http://localhost:5000/customers \
