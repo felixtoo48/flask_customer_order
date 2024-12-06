@@ -82,9 +82,9 @@ class TestAPI(unittest.TestCase):
             response = self.app.post('/orders', json={
                 'customer_id': customer_id,
                 'item': 'Test Item',
-                'amount': 150.75            
+                'amount': 150.75
             })
-        
+
             data = json.loads(response.data)
             self.assertEqual(response.status_code, 201)
             self.assertIn('Order added', data['message'])
@@ -112,6 +112,7 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.data)
         self.assertIn('Customer does not exist', data['error'])
+
 
 if __name__ == '__main__':
     unittest.main()
