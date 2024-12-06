@@ -24,7 +24,6 @@ class TestAPI(unittest.TestCase):
         response = self.app.get('/login')
         self.assertEqual(response.status_code, 302) # Redirects to Auth0
 
-
     def test_protected_route_without_login(self):
         response = self.app.get('/protected')
         self.assertEqual(response.status_code, 302)
@@ -42,8 +41,6 @@ class TestAPI(unittest.TestCase):
         response = self.app.get('/callback')
         self.assertEqual(response.status_code, 200)
         self.assertIn('test@example.com', response.json['email'])
-
-
 
     def test_add_customer(self):
         response = self.app.post('/customers', json={
@@ -92,7 +89,6 @@ class TestAPI(unittest.TestCase):
             self.assertEqual(response.status_code, 201)
             self.assertIn('Order added', data['message'])
 
-
     def test_add_customer_invalid(self):
         # Missing customer data/empty JSON body
         response = self.app.post('/customers', json={})
@@ -106,7 +102,6 @@ class TestAPI(unittest.TestCase):
         data = json.loads(response.data)
         self.assertIn('Missing required fields', data['error'])
 
-
     def test_add_order_invalid_customer(self):
         # Attempt to add an order for a non-existent customer
         response = self.app.post('/orders', json={
@@ -117,7 +112,6 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         data = json.loads(response.data)
         self.assertIn('Customer does not exist', data['error'])
-
 
 if __name__ == '__main__':
     unittest.main()
