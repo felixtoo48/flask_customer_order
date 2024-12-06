@@ -252,6 +252,13 @@ Classes in the model:
   -H "Content-Type: application/json" \
   -d '{"customer_id": 1, "item": "Product A", "amount": 150.75}'
   ```
+  Testing Incomplete customer data
+  ```
+  curl -X POST http://localhost:5000/customers \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Incomplete Customer"}'
+
+  ```
 	or
 * Tests are done using: `pytest`
         or
