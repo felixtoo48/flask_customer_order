@@ -96,28 +96,15 @@ class Order(db.Model):
     time = db.Column(db.DateTime, nullable=False, default=datetime.now)
 
 
-"""
-@app.route('/test_session')
-def test_session():
-    # Set a simple key-value pair in the session
-    session['test_key'] = 'test_value'
-
-    # Print the value from the session for debugging
-    print(f"Session test_key: {session.get('test_key')}")
-
-    return "Session test successful!"
-"""
-
-
 # Auth0 routes
 @app.route('/login')
 def login():
     state = str(uuid.uuid4())  # Generate a unique state
     nonce = str(uuid.uuid4())  # Generate a unique nonce for security
-    
+
     session['state'] = state
     session['nonce'] = nonce
-    
+
     return auth0.authorize_redirect(redirect_uri=os.getenv('AUTH0_CALLBACK_URL'), state=state, nonce=nonce)
 
 
@@ -131,7 +118,7 @@ def callback():
     # Validate that the state in the request matches the one stored in session
     if state != request.args.get('state'):
         raise Exception("State mismatch: potential CSRF attack detected!")
-    
+
     # Exchange authorization code for access token
     token = auth0.authorize_access_token()  # Retrieves the token from Auth0
     print("Access Token:", token)  # Print the full token for debugging
@@ -139,7 +126,7 @@ def callback():
     # Parse the ID token and check the nonce
     user_info = auth0.parse_id_token(token, nonce=nonce, claims_options={'iat': {'leeway': 60}})
     session['user'] = user_info  # Save user info in session
-    
+
     return jsonify(user_info)
 
 
