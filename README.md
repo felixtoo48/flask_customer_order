@@ -127,7 +127,9 @@ flask_customer_order/
 	- Create database and user
    ### Database Design
 	Customer Table: `id`, `name`, `code`, `phone_number`.
+
 	Order Table: `id`, `customer_id`(FK), `item`, `amount`, `time`. 
+
 
 2. Setup the Flask project following the project structure
 3. Coding the flask app
