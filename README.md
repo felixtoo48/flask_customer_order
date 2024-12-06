@@ -88,21 +88,39 @@ You can use your values according to your preference
 * To get started, install python3 development tools on your virtual machine.
 * `sudo apt-get update`
 * `sudo apt-get install python3-pip python3-dev libpq-dev postgresql postgresql-contrib`
-* Setup postgre database: `sudo -u postgres psql` (Create database, create user and grant all priviledges, alter encoding and timezone role)
+* Setup postgre database: `sudo -u postgres psql` 
+* Create database, create user and grant all priviledges, flush privileges)
+* mysql> `CREATE DATABASE customer_order;`
+* mysql> `CREATE USER 'flask_user'@'localhost' IDENTIFIED BY 'password';`
+* mysql> `GRANT ALL PRIVILEGES ON customer_order.* TO 'flask_user'@'localhost';`
+* mysql> `FLUSH PRIVILEGES`
 * Install virtual environment and install django
 * `sudo -H pip3 install --upgrade pip` then `sudo -H pip3 install virtualenv`
 * Create directory and install django 
-* `mkdir project_portfolio && cd project_portfolio`
-* `virtualenv bitinvoiceenv`
-* `source bitinvoiceenv/bin/activate`
+* `mkdir export_foods && cd export_foods`
+* Create the project's virtual environment and start it
+* `virtualenv export_foodsenv`
+* `source export_foodsenv/bin/activate`
 * Install packages: `pip install django` and `pip install psycopg2`
-* Create a new django project called bitinvoice: `django-admin startproject bitinvoice`
-* `cd bitinvoice` and edit settings file with Database details
-* Run django app: `python manage.py makemigrations` then `python manage.py migrate`
+* Create a new django project `export_foodsapp`: `django-admin startproject export_foodsapp`
+* `cd export_foodsapp` and edit settings file `export_foodsapp/settings.py` with Database details
+* `
+* DATABASES = {
+*     'default': {
+*       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+*        'NAME': 'myproject',
+*        'USER': 'myprojectuser',
+*        'PASSWORD': 'password',
+*        'HOST': 'localhost',
+*        'PORT': '',
+*    }
+* }
+* `
+* Make migrations: `python manage.py makemigrations` then `python manage.py migrate`
 * Create a superuser: `python manage.py createsuperuser`
 * Collect static: `python manage.py collectstatic`
 * Run app: `python manage.py runserver 0.0.0.0:5000`
-* Start the app bitinvoice: `python manage.py startapp bitinvoice_01`
+* Start the app: `python manage.py startapp export_foods`
 
 ## File Descriptions
 [app.py](app.py) - This are the base models or entry point to the project.
