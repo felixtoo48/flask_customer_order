@@ -268,7 +268,8 @@ Classes in the model:
 * Tests can also be done using coverage: `pytest --cov=app`
 
 ## Bugs
-1. Auth0 Callback Allowed URL: CSRF Warning! state mismatch between request and response 
+1. Auth0 Callback Allowed URL: CSRF Warning! state mismatch between request and response
+	- Trouble shooting between state and session 
 
 ## Author
 * Felix Too - [Github](https://github.com/felixtoo48) 
