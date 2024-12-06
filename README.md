@@ -51,6 +51,7 @@ For the technical challenge, I decided to develop the project using Flask becaus
 * [Getting Started](#getting-started)
 * [Environment](#environment)
 * [Installation](#installation)
+* [Step By Step Guide](#step-by-step-guide)
 * [File Descriptions](#file-descriptions)
 * [Usage](#usage)
 * [Bugs](#bugs)
@@ -102,7 +103,7 @@ You can use your values according to your preference
 * `python -m venv venv`
 * `source venv/bin/activate`
 * `pip install flask mysql-connector-python gunicorn`
-* Project structure
+* Project structure:
 ```
 flask_customer_order/
 │── app.py
@@ -115,10 +116,35 @@ flask_customer_order/
 |__ tests/test_app.py
 ```
 * Install packages required
-* Or install dependancies from requirements.txt file `pip install requirements.txt`
+* Or install dependancies from requirements.txt file `pip install -r requirements.txt`
 * Create a new flask project `app.py`
 * Run app: `flask run`
 * Continue development
+
+## Step By Step Guide
+1. Setup MySQL database
+	- Install MySQL if not already
+	- Create database and user
+	- #### Database Design
+		Customer Table: `id`, `name`, `code`, `phone_number`.
+		Order Table: `id`, `customer_id`(FK), `item`, `amount`, `time`. 
+2. Setup the Flask project following the project structure
+3. Coding the flask app
+4. Setup environment variables
+	- create .env file
+5. Configure OIDC with Auth0
+	- Sign up and create new application on Auth0
+	- Configure:
+		* Allowed Login URLs: `http://localhost:5000/loin`
+		* Allowed Callback URLs: `http://localhost:5000/callback`
+		* Allowed Protected URLs: `http://localhost:5000/protected`
+		* Allowed Logout URLs: `http://localhost:5000/logout`
+		* Allowed Web Origins URL: `http://localhost:5000`
+6. Configure Africa's Talking for SMS integration
+	- Sign up
+	- Get API key and Username
+7. Create tests in `tests/` folder, using pytest
+8. Set up CI/CD with GitHub Actions
 
 ## File Descriptions
 [app.py](app.py) - This are the base models or entry point to the project.
