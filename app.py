@@ -13,6 +13,7 @@ import africastalking
 from functools import wraps
 from authlib.common.security import generate_token
 import uuid
+from cachelib.file import FileSystemCache
 
 
 # load environment variables
@@ -23,9 +24,9 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://flask_user:PasswordHere1234.@localhost/customer_order'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SESSION_FILE_DIR'] = './flask_session'
-app.config['SESSION_COOKIE_NAME'] = 'session_cookie'
+app.config['SESSION_CACHELIB'] = FileSystemCache('./flask_session', threshold=500, default_timeout=3600)
 app.config['SESSION_PERMANENT'] = False
+
 app.secret_key = os.getenv('SECRET_KEY')
 
 
