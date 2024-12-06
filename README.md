@@ -54,6 +54,7 @@ For the technical challenge, I decided to develop the project using Flask becaus
 * [Step By Step Guide](#step-by-step-guide)
 * [File Descriptions](#file-descriptions)
 * [Usage](#usage)
+* [Testing](#testing)
 * [Bugs](#bugs)
 * [Author](#author)
 * [License](#license)
@@ -145,6 +146,12 @@ flask_customer_order/
 	- Sign up
 	- Get API key and Username
 7. Create tests in `tests/` folder, using pytest
+	### Testing Methods
+	- Testing using CURL
+	or
+	- Tests are done using: `pytest`
+	or
+	- Tests can also be done using coverage: `pytest --cov=app`
 8. Set up CI/CD with GitHub Actions
 
 ## File Descriptions
@@ -229,8 +236,29 @@ Classes in the model:
 * `def test_add_customer_invalid(self)` - Tests addition of customer with missing data
 * `def test_add_order_invalid_customer(self)` - Tests addition of order for a non existent customer
 
+## Testing
+* Testing methods can be conducted as follows:
+* Testing can be conducted using CURL
+  Testing APIs using CURL example:
+  Testing customer API
+  ```
+  curl -X POST http://localhost:5000/customers \
+  -H "Content-Type: application/json" \
+  -d '{"name": "John Doe", "phone_number": "+254701234567"}'
+  ```
+  Testing order API
+  ```
+  curl -X POST http://localhost:5000/orders \
+  -H "Content-Type: application/json" \
+  -d '{"customer_id": 1, "item": "Product A", "amount": 150.75}'
+  ```
+	or
+* Tests are done using: `pytest`
+        or
+* Tests can also be done using coverage: `pytest --cov=app`
+
 ## Bugs
-No known bugs at this time. 
+1. Auth0 Callback Allowed URL state mismatch between request and response 
 
 ## Author
 * Felix Too - [Github](https://github.com/felixtoo48) 
